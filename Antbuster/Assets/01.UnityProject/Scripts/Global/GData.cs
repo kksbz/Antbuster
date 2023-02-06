@@ -2,17 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GData : MonoBehaviour
+public static partial class GData
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public const string TITLE_SCENE_NAME = "00.TitleScene";
+    public const string PLAY_SCENE_NAME = "01.PlayScene";
 }
