@@ -19,7 +19,7 @@ public class AntPooling : MonoBehaviour
     //개미풀 생성하는 함수
     private List<GameObject> AntPoolSetup()
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 7; i++)
         {
             GameObject ant_ = Instantiate(antPrefab);
             ant_.SetActive(false);
@@ -29,7 +29,7 @@ public class AntPooling : MonoBehaviour
         return antList;
     } //AntPoolSetup
 
-    //개미의 로컬스케일과 좌표 설정하는 함수
+    //개미의 로컬스케일과 좌표 설정하고 스폰하는 함수
     private void SetupAntListScale(List<GameObject> antList_)
     {
         timeCheck += Time.deltaTime;

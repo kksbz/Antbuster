@@ -2,28 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class BulletManager : MonoBehaviour
 {
-    public List<GameObject> cakeList = default;
-    private static GameManager instance = null;
-    public static GameManager Instance
+    public List<GameObject> bulletList = default;
+    private static BulletManager instance = null;
+    public static BulletManager Instance
     {
         get
         {
-            if (instance == null || instance == default)
+            if(instance == null || instance == default)
             {
                 return null;
             }
             return instance;
         }
-    } //Instance프로퍼티
+    }
 
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            InitGame();
+            InitBulletManager();
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -35,8 +35,10 @@ public class GameManager : MonoBehaviour
         }
     } //Awake
     
-    public void InitGame()
+    public void InitBulletManager()
     {
-        cakeList = new List<GameObject>();
+        bulletList = new List<GameObject>();
     }
+
+    
 }
