@@ -19,7 +19,7 @@ public class AntPooling : MonoBehaviour
     //개미풀 생성하는 함수
     private List<GameObject> AntPoolSetup()
     {
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 10; i++)
         {
             GameObject ant_ = Instantiate(antPrefab);
             ant_.SetActive(false);
