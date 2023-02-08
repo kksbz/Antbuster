@@ -23,7 +23,7 @@ public class CakeControl : MonoBehaviour
     {
         cakeImage = gameObject.GetComponent<Image>();
         cakePieces = new List<Sprite>();
-        cakePieces.Add(cakeFull);
+        cakePieces.Add(noCake);
         cakePieces.Add(cake1);
         cakePieces.Add(cake2);
         cakePieces.Add(cake3);
@@ -31,7 +31,7 @@ public class CakeControl : MonoBehaviour
         cakePieces.Add(cake5);
         cakePieces.Add(cake6);
         cakePieces.Add(cake7);
-        cakePieces.Add(noCake);
+        cakePieces.Add(cakeFull);
         cakePrefab = Resources.Load("Prefabs/CakePiece") as GameObject;
         GameManager.Instance.cakeList = SetupCake();
         GameManager.Instance.cakeList = SetupCakeListScale(GameManager.Instance.cakeList);
@@ -43,12 +43,12 @@ public class CakeControl : MonoBehaviour
         int cakeNum = 0;
         foreach (GameObject cakePiece_ in cakeList_)
         {
-            if (cakePiece_.activeInHierarchy)
+            if (!cakePiece_.activeInHierarchy)
             {
                 cakeNum += 1;
             }
         }
-        cakeImage.sprite = cakePieces[cakeNum];
+        cakeImage.sprite = cakePieces[cakeNum - 1];
     } //SetupCakeImage
 
     //케이크 생성 함수
