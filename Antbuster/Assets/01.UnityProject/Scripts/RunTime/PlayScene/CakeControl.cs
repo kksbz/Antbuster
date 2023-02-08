@@ -45,7 +45,11 @@ public class CakeControl : MonoBehaviour
         {
             if (!cakePiece_.activeInHierarchy)
             {
-                cakeNum += 1;
+                //개미가 케이크를 개미집까지 옮긴경우의 이미지출력을 위한 예외처리
+                if (cakePiece_.name != GData.OUT_CAKE_NAME)
+                {
+                    cakeNum += 1;
+                }
             }
         }
         cakeImage.sprite = cakePieces[cakeNum - 1];
@@ -61,6 +65,7 @@ public class CakeControl : MonoBehaviour
             cakePiece_.transform.parent = this.transform;
             if (i == 0)
             {
+                //List의 첫번째에는 게임승패를 판별하기 위한 이름을 저장
                 cakePiece_.name = GData.END_CONDITION_NAME;
             }
             else
@@ -87,9 +92,4 @@ public class CakeControl : MonoBehaviour
     {
         SetupCakeImage(GameManager.Instance.cakeList);
     } //Update
-
-    private void OnTriggerEnter2D(Collider2D obj_)
-    {
-
-    } //OnTriggerEnter2D
 }

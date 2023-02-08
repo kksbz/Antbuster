@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public bool isGameOver = default;
     public List<GameObject> cakeList = default;
     private static GameManager instance = null;
     public static GameManager Instance
@@ -34,9 +35,51 @@ public class GameManager : MonoBehaviour
             }
         }
     } //Awake
-    
+
     public void InitGame()
     {
+        Time.timeScale = 1;
         cakeList = new List<GameObject>();
+        isGameOver = false;
+    } //InitGame
+
+    //게임오버 조건 체크하는 함수
+    private void GameOverCheck()
+    {
+        int outCakeNum = 8;
+        foreach (GameObject cakePiece_ in cakeList)
+        {
+            if (cakePiece_.name.Equals(GData.OUT_CAKE_NAME))
+            {
+                outCakeNum -= 1;
+            }
+        }
+
+        if (outCakeNum == 0)
+        {
+            isGameOver = true;
+        }
+    } //GameOverCheck
+
+    private void ShowGameOver()
+    {
+        GameOverCheck();
+        if(isGameOver == true)
+        {
+            Time.timeScale = 0;
+            GameObject gameOverObj = GFunc.GetRootObj("UiObj");
+            gameOverObj = gameOverObj.FindChildObj(GData.GAME_OVER_UI_NAME);
+            gameOverObj.SetActive(true);
+            if(Input.GetKeyDown(KeyCode.R))
+            {
+                InitGame();
+                GFunc.LoadScene(GData.TITLE_SCENE_NAME);
+            }
+        }
+    } //ShowGameOver
+
+    void Update()
+    {
+        ShowGameOver();
     }
 }

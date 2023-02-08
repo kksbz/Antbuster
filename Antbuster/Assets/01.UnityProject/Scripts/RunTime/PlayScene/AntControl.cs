@@ -35,6 +35,7 @@ public class AntControl : MonoBehaviour
         antHpImage = gameObject.FindChildObj("HpBar").GetComponentMust<Image>();
     }
 
+    //개미가 활성화될 때 bool값 및 Hp 초기화
     private void OnEnable()
     {
         isDead = false;
@@ -46,22 +47,9 @@ public class AntControl : MonoBehaviour
     private void MoveAnt()
     {
         ShowAntHp();
-        if (isGetCake == true && isDead == true)
-        {
-            if (GameManager.Instance.cakeList[cakeNum].activeInHierarchy)
-            {
-                StartCoroutine(CakeCallBack());
-            }
-            else
-            {
-                gameObject.SetActive(false);
-            }
-        }
-        else if (isGetCake == false && isDead == true)
-        {
-            gameObject.SetActive(false);
-        }
 
+
+        //개미가 케이크조각을 들고있고 죽지않았을 경우 케이크조각의 위치는 개미를 따라다님
         if (isGetCake == true && isDead == false)
         {
             GameManager.Instance.cakeList[cakeNum].GetComponentMust<Transform>().position =
@@ -81,8 +69,9 @@ public class AntControl : MonoBehaviour
                 objRect.anchoredPosition = Vector2.MoveTowards(objRect.anchoredPosition, poolObj.anchoredPosition, antSpeed * Time.deltaTime);
             }
         }
-        else if (isChangeMove == true &&  isDead == false)
+        else if (isChangeMove == true && isDead == false)
         {
+            //랜덤방향으로 이동
             objRect.anchoredPosition = Vector2.MoveTowards(objRect.anchoredPosition, randomPos, antSpeed * Time.deltaTime);
         }
     } //MoveAnt
@@ -115,6 +104,7 @@ public class AntControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Die();
         GetRandomPos();
         MoveAnt();
     } //Update
@@ -126,7 +116,7 @@ public class AntControl : MonoBehaviour
         {
             if (!cakePiece_.activeInHierarchy)
             {
-                if (cakePiece_.name != GData.END_CONDITION_NAME)
+                if (cakePiece_.name != GData.END_CONDITION_NAME && cakePiece_.name != GData.OUT_CAKE_NAME)
                 {
                     string cakeName = cakePiece_.name;
                     cakeName = Regex.Replace(cakeName, @"\D", "");
@@ -141,31 +131,35 @@ public class AntControl : MonoBehaviour
         }
     } //GetCakePiece
 
-    //cakeList 길이가 줄어들때 케이크조각 이름 재설정하는 함수
-    private void cakeListReName(List<GameObject> cakeList_)
-    {
-        for (int i = 0; i < cakeList_.Count; i++)
-        {
-            if (i == 0)
-            {
-                cakeList_[i].name = GData.END_CONDITION_NAME;
-            }
-            else
-            {
-                cakeList_[i].name = $"cake{i}";
-            }
-        }
-    } //cakeListReName
-
     //개미죽음 함수
     private void Die()
     {
-        isDead = true;
+        if (isDead == false)
+        {
+            return;
+        }
+        //개미가 케이크조각을 갖고있는 상태에서 죽을 경우
+        if (isGetCake == true && isDead == true)
+        {
+            if (GameManager.Instance.cakeList[cakeNum].activeInHierarchy)
+            {
+                StartCoroutine(CakeCallBack());
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
+        }
+        else if (isGetCake == false && isDead == true)
+        {
+            gameObject.SetActive(false);
+        }
     } //Die
 
     //개미가 케이크조각을 갖고 있을 때 죽을 경우 함수
     IEnumerator CakeCallBack()
     {
+        //케이크조각의 위치를 케이크의 위치로 보내고 케이크원상복구
         GameManager.Instance.cakeList[cakeNum].GetComponentMust<RectTransform>().anchoredPosition =
             Vector2.MoveTowards(GameManager.Instance.cakeList[cakeNum].GetComponentMust<RectTransform>().anchoredPosition, cakeObj.position, 500f * Time.deltaTime);
         yield return new WaitForSeconds(3f);
@@ -181,30 +175,30 @@ public class AntControl : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D obj_)
     {
+        //개미가 총알에 맞았을 때
         if (obj_.tag.Equals("Bullet"))
         {
             antHp -= 2f;
             if (antHp <= 0f)
             {
-                Die();
+                isDead = true;
+                // Die();
             }
         }
 
+        //개미가 케이크에 도착했을때 케이크를 들고있지 않는 경우
         if (obj_.tag.Equals("Cake") && isGetCake == false)
         {
             GetCakePiece();
         }
 
-        //여기서 문제발생 케이크리스트에서
+        //개미가 케이크조각을 가지고 개미풀에 도착했을 때
         if (obj_.tag.Equals("AntPool") && isGetCake == true)
         {
             // Debug.Log($"케이크가지고 풀이 도착? {isCakeInPool}");
+            GameManager.Instance.cakeList[cakeNum].name = GData.OUT_CAKE_NAME;
             GameManager.Instance.cakeList[cakeNum].SetActive(false);
-            GameManager.Instance.cakeList[cakeNum].name = "OutCake";
-            GameManager.Instance.cakeList.RemoveAt(cakeNum);
-            // Debug.Log($"지운 케잌조각 인덱스: {cakeNum}");
-            cakeListReName(GameManager.Instance.cakeList);
-            // Debug.Log($"케이크리스트 길이: {GameManager.Instance.cakeList.Count}");
+
             gameObject.SetActive(false);
         }
 
