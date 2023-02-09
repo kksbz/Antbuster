@@ -40,6 +40,10 @@ public class CakeControl : MonoBehaviour
     //케이크 이미지 리스트 생성 함수
     private void SetupCakeImage(List<GameObject> cakeList_)
     {
+        if (GameManager.Instance.isGameOver == true)
+        {
+            return;
+        }
         int cakeNum = 0;
         foreach (GameObject cakePiece_ in cakeList_)
         {

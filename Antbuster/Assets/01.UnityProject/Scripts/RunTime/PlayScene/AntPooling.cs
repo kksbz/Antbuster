@@ -6,7 +6,7 @@ public class AntPooling : MonoBehaviour
 {
     private GameObject antPrefab = default;
     private List<GameObject> antList = default;
-    private float timeLate = 0.5f;
+    private float timeLate = 1f;
     private float timeCheck = 0f;
     // Start is called before the first frame update
     void Start()

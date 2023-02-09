@@ -38,7 +38,6 @@ public class GameManager : MonoBehaviour
 
     public void InitGame()
     {
-        Time.timeScale = 1;
         cakeList = new List<GameObject>();
         isGameOver = false;
     } //InitGame
@@ -66,7 +65,6 @@ public class GameManager : MonoBehaviour
         GameOverCheck();
         if(isGameOver == true)
         {
-            Time.timeScale = 0;
             GameObject gameOverObj = GFunc.GetRootObj("UiObj");
             gameOverObj = gameOverObj.FindChildObj(GData.GAME_OVER_UI_NAME);
             gameOverObj.SetActive(true);

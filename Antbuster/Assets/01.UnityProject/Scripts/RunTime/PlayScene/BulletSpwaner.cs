@@ -22,6 +22,11 @@ public class BulletSpwaner : MonoBehaviour
         // {
         //     return;
         // }
+        if(TagetInAttackRange.isTagetInAttackRange == false)
+        {
+            return;
+        }
+        
         float angle = Mathf.Atan2(tagetPos.y - transform.position.y, tagetPos.x - transform.position.x) * Mathf.Rad2Deg;
         this.transform.rotation = Quaternion.AngleAxis(angle - 90f, Vector3.forward);
         //}포탑머리가 레인지범위에 들어온 개미를 향하게 하는 식
